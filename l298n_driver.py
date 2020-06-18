@@ -52,60 +52,18 @@ try:
     pygame.init()
     window = pygame.display.set_mode((200, 200), 0, 32)
     pygame.joystick.init()
-    if not pygame.joystick.get_count(): print('no joystick')
     j = pygame.joystick.Joystick(0)
     j.init()
     print(f'Initialized: {j.get_name()}')
 except:
+    print('No Joystick connected')
     pygame.joystick.quit()
     exit()
 
 # key mappings
-
 PS3_axis_left_h = 0
 PS3_axis_left_v = 1 
 PS3_axis_right_h = 2 
-
-#def mv_fw():
-#    GPIO.output(lf_bw, GPIO.LOW)
-#    GPIO.output(lf_fw, GPIO.HIGH)
-#    GPIO.output(rf_bw, GPIO.LOW)
-#    GPIO.output(rf_fw, GPIO.HIGH)
-#    GPIO.output(lb_bw, GPIO.LOW)
-#    GPIO.output(lb_fw, GPIO.HIGH)
-#    GPIO.output(rb_bw, GPIO.LOW)
-#    GPIO.output(rb_fw, GPIO.HIGH)
-#def mv_bw():
-#    GPIO.output(lf_bw, GPIO.HIGH)
-#    GPIO.output(lf_fw, GPIO.LOW)
-#    GPIO.output(rf_bw, GPIO.HIGH)
-#    GPIO.output(rf_fw, GPIO.LOW)
-#    GPIO.output(lb_bw, GPIO.HIGH)
-#    GPIO.output(lb_fw, GPIO.LOW)
-#    GPIO.output(rb_bw, GPIO.HIGH)
-#    GPIO.output(rb_fw, GPIO.LOW)
-#def turn_r(dutyCycle):
-#    lf.forward(dutyCycle)
-#    rf.backward(dutyCycle)
-#    lb.forward(dutyCycle)
-#    rb.backward(dutyCycle)
-#
-#def turn_l(dutyCycle):
-#    lf.backward(dutyCycle)
-#    rf.forward(dutyCycle)
-#    lb.backward(dutyCycle)
-#    rb.forward(dutyCycle)
-
-def test():
-    fl.forward(.5)
-    sleep(2)
-    fr.forward(.5)
-    sleep(2)
-    bl.forward(.5)
-    sleep(2)
-    br.forward(.5)
-    sleep(2)
-
 
 def main():
     try:
@@ -115,10 +73,12 @@ def main():
             joystick_left_h = j.get_axis(PS3_axis_left_h)
             joystick_left_v = j.get_axis(PS3_axis_left_v)
             joystick_right_h = j.get_axis(PS3_axis_right_h)
-
+            
+            # left verticval joystick values inverted
             if joystick_left_v != 0:
                 joystick_left_v = -joystick_left_v
-
+            
+            # calculation for the wheel vectors 
             if (joystick_left_h != 0) or (joystick_left_v != 0) or (joystick_right_h != 0):
                 # calculate desired speed (magnitude) [-1,1]
                 speed = math.sqrt(joystick_left_h**2 + joystick_left_v**2)/1.39
@@ -133,13 +93,13 @@ def main():
                 else:
                     angle = 0
 
-                if joystick_left_h >= 0 and angle >= 0:
+                if joystick_left_h <= 0 and angle >= 0:
                     angle = angle
-                elif joystick_left_h >= 0 and angle < 0:
+                elif joystick_left_h <= 0 and angle < 0:
                     angle = 360 + angle
-                elif joystick_left_h < 0 and angle >= 0:
+                elif joystick_left_h > 0 and angle >= 0:
                     angle = 180 - angle
-                elif joystick_left_h < 0 and angle < 0:
+                elif joystick_left_h > 0 and angle < 0:
                     angle = 180 - angle
                 
                 angle = ((angle-90)%360) *math.pi/180
@@ -148,10 +108,10 @@ def main():
                 rotation = joystick_right_h
 
                 # calculate vectors
-                v_fl = speed * math.sin(angle + (math.pi/4)) + rotation
-                v_fr = speed * math.cos(angle + (math.pi/4)) - rotation
-                v_bl = speed * math.cos(angle + (math.pi/4)) + rotation
-                v_br = speed * math.sin(angle + (math.pi/4)) - rotation
+                v_fl = 0.8*(speed * math.sin(angle + (math.pi/4))) + 0.2*rotation
+                v_fr = 0.8*(speed * math.cos(angle + (math.pi/4))) - 0.2*rotation
+                v_bl = 0.8*(speed * math.cos(angle + (math.pi/4))) + 0.2*rotation
+                v_br = 0.8*(speed * math.sin(angle + (math.pi/4))) - 0.2*rotation
                 
                 print(f'FL={v_fl} FR={v_fr} BL={v_bl} BR={v_br}')
 
