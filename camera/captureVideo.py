@@ -1,30 +1,41 @@
 import numpy as np
 import cv2 as cv
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
-cap0 = cv.VideoCapture(0)
+cap = cv.VideoCapture('/dev/video2')
 #cap1 = cv.VideoCapture(1)
 
-if not cap0.isOpened():
+if not cap.isOpened():
     print('[ERROR] Cannot open camera stream.')
     quit()
 
+first = True
+
 try:
     while True:
-        ret0, frame0 = cap0.read()
+        ret, frame = cap.read()
+        if first:
+            print(type(frame))
+            print(frame)
+            print(frame.shape)
+            first = False
+            imgplot = plt.imshow(frame)
+            plt.show()
         #ret1, frame1 = cap1.read()
 
-        if not ret0:
+        if not ret:
             raise ValueError
 
         # show one camera
-        cv.imshow('frame', frame0)
-
+        cv.imshow('Webcam Life2Coding', frame)
+        cv.waitKey(1)
 except KeyboardInterrupt:
     print('[INFO] Programm is shutting down')
 except ValueError:
     print("[ERROR] Can't receive frame. Exiting...")
 finally:
-    cap0.release()
+    cap.release()
     #cap1.release()
     cv.destroyAllWindows()
     quit()
