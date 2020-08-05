@@ -10,9 +10,9 @@ bus = smbus.SMBus(1)
 def writeNumber(value):
     # sending an float to the arduino
     # consider changing d to f for float precision
-    ba = list(struct.pack('!f', value))
+    ba = list(struct.pack('f', value))
     print(ba)
-    bus.write_i2c_block_data(arduino, ba[0], ba[1:3])
+    bus.write_i2c_block_data(arduino, ba[0], ba[1:4])
 
 while True:
     number = float(input('Give me a number: '))
