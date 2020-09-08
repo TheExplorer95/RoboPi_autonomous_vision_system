@@ -23,7 +23,7 @@ except:
 # key mappings
 PS3_axis_left_h = 0
 PS3_axis_left_v = 1 
-PS3_axis_right_h = 2 
+PS3_axis_right_h = 3 
 
 def getJoystickReading():
     pygame.event.get()
@@ -64,6 +64,8 @@ def getJoystickReading():
 
         # calculate desired rotation
         rotation = joystick_right_h
+        
+        print(f'The rotation is: {rotation}')
 
         return [speed, angle, rotation]
 
