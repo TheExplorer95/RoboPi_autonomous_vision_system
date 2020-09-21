@@ -1,31 +1,26 @@
 import logging
 
-class MainLogger():
     
-        __logFormat = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    
-    def __init__(name='root', level=logging.INFO, fileName='ProblemSolver'):
-        # create logger
-        self._logger = logging.getLogger(name)
-        self._logger.setLevel(level)
-        # create file handler
-        fh = logging.FileHandler(fileName)
-        fh.setLevel(level)
-    
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.ERROR)
+def MainLogger(loggerName='root', level=logging.INFO, fileName='ProblemSolver.log', logFormat='%(asctime)s - %(name)s - %(levelname)s - %(message)s'):
+    # create logger
+    logger = logging.getLogger(loggerName)
+    logger.setLevel(level)
+    # create file handler
+    fh = logging.FileHandler(fileName)
+    fh.setLevel(level)
 
-        formatter = logging.Formatter(logFormat)
-        fh.setFormatter(formatter)
-        ch.setFormatter(formatter)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.ERROR)
 
-        logger.addHandler(fh)
-        logger.addHandler(ch)
+    formatter = logging.Formatter(logFormat)
+    fh.setFormatter(formatter)
+    ch.setFormatter(formatter)
 
-class SubLogger():
+    logger.addHandler(fh)
+    logger.addHandler(ch)
+
+def SubLogger(loggerName):
     # creates a submodule for the root logger
     # deeper variable scopes belong to this logger
-
-    def __init__(name):
-        self._module_logger = logging.getLogger(name)
+    module_logger = logging.getLogger(loggerName)
 
