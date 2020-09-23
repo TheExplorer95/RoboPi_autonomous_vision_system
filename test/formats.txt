@@ -1,0 +1,32 @@
+luvcview 0.2.6
+
+SDL information:
+  Video driver: x11
+  A window manager is available
+Device information:
+  Device path:  /dev/video6
+{ pixelformat = 'JPEG', description = 'JFIF JPEG' }
+{ discrete: width = 320, height = 240 }
+	Time interval between frame: 
+{ discrete: width = 640, height = 480 }
+	Time interval between frame: 
+{ pixelformat = 'RGB3', description = 'RGB3' }
+{ discrete: width = 320, height = 240 }
+	Time interval between frame: 
+{ discrete: width = 640, height = 480 }
+	Time interval between frame: 
+{ pixelformat = 'BGR3', description = 'BGR3' }
+{ discrete: width = 320, height = 240 }
+	Time interval between frame: 
+{ discrete: width = 640, height = 480 }
+	Time interval between frame: 
+{ pixelformat = 'YU12', description = 'YU12' }
+{ discrete: width = 320, height = 240 }
+	Time interval between frame: 
+{ discrete: width = 640, height = 480 }
+	Time interval between frame: 
+{ pixelformat = 'YV12', description = 'YV12' }
+{ discrete: width = 320, height = 240 }
+	Time interval between frame: 
+{ discrete: width = 640, height = 480 }
+	Time interval between frame: 

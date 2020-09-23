@@ -3,7 +3,7 @@ import cv2 as cv
 
 try:
     # lock devices
-    cap0 = cv.VideoCapture('/dev/video6')
+    cap0 = cv.VideoCapture('/dev/video7')
     #cap1 = cv.VideoCapture('/dev/video7')
     
     # detect if connection was establish sucessfully

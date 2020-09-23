@@ -1,0 +1,83 @@
+Module                  Size  Used by
+gspca_ov519            45056  0
+gspca_main             28672  3 gspca_ov519
+rfcomm                 77824  16
+bnep                   28672  2
+hci_uart              122880  1
+btqca                  20480  1 hci_uart
+btbcm                  16384  1 hci_uart
+btintel                28672  1 hci_uart
+btsdio                 20480  0
+bluetooth             557056  44 btsdio,hci_uart,btintel,btqca,bnep,btbcm,rfcomm
+ecdh_generic           16384  1 bluetooth
+ecc                    36864  1 ecdh_generic
+bcm2835_v4l2           45056  0
+uvcvideo               94208  0
+joydev                 24576  0
+input_leds             16384  0
+bcm2835_mmal_vchiq     40960  1 bcm2835_v4l2
+vc_sm_cma              45056  1 bcm2835_mmal_vchiq
+brcmfmac              385024  0
+v4l2_common            16384  2 uvcvideo,bcm2835_v4l2
+videobuf2_vmalloc      20480  3 uvcvideo,bcm2835_v4l2,gspca_main
+videobuf2_memops       20480  1 videobuf2_vmalloc
+brcmutil               20480  1 brcmfmac
+cfg80211              688128  1 brcmfmac
+videobuf2_v4l2         28672  3 uvcvideo,bcm2835_v4l2,gspca_main
+videobuf2_common       53248  4 uvcvideo,bcm2835_v4l2,gspca_main,videobuf2_v4l2
+videodev              212992  9 uvcvideo,v4l2_common,videobuf2_common,gspca_ov519,bcm2835_v4l2,gspca_main,videobuf2_v4l2
+mc                     53248  4 uvcvideo,videobuf2_common,videodev,videobuf2_v4l2
+spidev                 24576  0
+raspberrypi_hwmon      16384  0
+raspberrypi_cpufreq    16384  0
+rpivid_mem             16384  0
+uio_pdrv_genirq        16384  0
+uio                    20480  1 uio_pdrv_genirq
+sch_fq_codel           20480  7
+iscsi_tcp              24576  0
+libiscsi_tcp           32768  1 iscsi_tcp
+libiscsi               61440  2 libiscsi_tcp,iscsi_tcp
+scsi_transport_iscsi   102400  3 libiscsi,libiscsi_tcp,iscsi_tcp
+i2c_bcm2708            16384  0
+snd_bcm2835            28672  0
+snd_pcm               102400  1 snd_bcm2835
+snd_timer              36864  1 snd_pcm
+snd                    77824  3 snd_timer,snd_bcm2835,snd_pcm
+parport_pc             28672  0
+ppdev                  24576  0
+lp                     20480  0
+parport                36864  3 lp,parport_pc,ppdev
+ip_tables              28672  0
+x_tables               36864  1 ip_tables
+autofs4                49152  2
+btrfs                1404928  0
+zstd_compress         163840  1 btrfs
+raid10                 69632  0
+raid456               184320  0
+async_raid6_recov      20480  1 raid456
+async_memcpy           20480  2 raid456,async_raid6_recov
+async_pq               20480  2 raid456,async_raid6_recov
+async_xor              20480  3 async_pq,raid456,async_raid6_recov
+async_tx               20480  5 async_xor,async_pq,raid456,async_memcpy,async_raid6_recov
+xor                    16384  2 async_xor,btrfs
+xor_neon               16384  1 xor
+raid6_pq              106496  4 async_pq,btrfs,raid456,async_raid6_recov
+libcrc32c              16384  2 btrfs,raid456
+raid1                  53248  0
+raid0                  24576  0
+multipath              20480  0
+linear                 20480  0
+hid_generic            16384  0
+usbhid                 61440  0
+broadcom               20480  1
+bcm_phy_lib            16384  1 broadcom
+mdio_bcm_unimac        20480  0
+crc32_arm_ce           16384  2
+sdhci_iproc            20480  0
+genet                  61440  0
+gpio_regulator         16384  1
+phy_generic            20480  0
+fixed                  20480  0
+aes_arm_bs             20480  0
+crypto_simd            16384  1 aes_arm_bs
+cryptd                 24576  1 crypto_simd
