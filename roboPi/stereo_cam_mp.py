@@ -1,15 +1,15 @@
 import numpy as np
 import cv2 as cv
-from threading import Thread, Lock
+from multiprocessing import Process
+from threading import Thread
 import logging
 from collections import deque
 from time import sleep
 
 class CamThread():
     
-    def __init__(self, ID: int, name: str, showVideo=False, deque_size=3):
-        self.lock = Lock()
-
+    def __init__(self, ID: int, name: str, deque_size=3):
+        
         # set camera properties
         self.camID = ID
         self.name = name
@@ -20,23 +20,24 @@ class CamThread():
         
         # initialize cam and check if working
         self.init_stream()
-        sleep(1)
-        self.init_frame_grabbing() 
         sleep(0.1)
-        if showVideo:
-            self.show_video()
+        self.init_frame_grabbing() 
 
     def init_stream(self):    
         def init_stream_thread():
-            self.cam = cv.VideoCapture(self.camID)
-            if not self.cam.isOpened() and not self.online:
-                print(f'{self.name} was not initialized.') 
-            elif self.cam.isOpened() and not self.online:
-                print(f'{self.name} was initialized')
-                self.online = True
-                self.cam.set(cv.CAP_PROP_FOURCC, cv.VideoWriter_fourcc('J', 'P', 'E', 'G'))
+            try:
+                self.cam = cv.VideoCapture(self.camID)
+                if not self.cam.isOpened() and not self.online:
+                    raise Exception(f'{self.name} was not initialized.') 
+                elif self.cam.isOpened() and not self.online:
+                    print(f'{self.name} was initialized')
+                    logging.info(f'{self.name} was initialized')
+                    self.online = True
+                    self.cam.set(cv.CAP_PROP_FOURCC, cv.VideoWriter_fourcc('J', 'P', 'E', 'G'))
+            except Exception as e:
+                logging.exception(str(e))
 
-        self.loadStreamThread = Thread(target=init_stream_thread, args=())
+        self.loadStreamThread = Process(target=init_stream_thread, args=())
         self.loadStreamThread.daemon = True
         self.loadStreamThread.start()
 
@@ -45,12 +46,13 @@ class CamThread():
             try:
                 while True:
                     if self.online:
-                        self.lock.acquire()
                         ret, frame = self.cam.read()
-                        self.lock.release()
                         if ret:
                             self.frames.append(frame) 
-                    sleep(0.01)
+                        #else:    
+                        #    raise Exception(f'Camera stream {self.name} is broken')      
+            except Exception as e:
+                logging.exception(str(e))
             finally:
                 self.end()
 
@@ -63,27 +65,25 @@ class CamThread():
 
     def get_frame(self):
         if len(self.frames) == 0:
-            return None
+            raise Exception('[Error] - You did not check if frames are available')
         return self.frames.pop()
 
     def show_video(self):
-        def show_video_thread():        
-            cv.namedWindow(self.name, cv.WINDOW_AUTOSIZE)
+        try:    
             while True:
                 if self.frame_available():
-                    self.lock.acquire()
                     loadedFrame = self.get_frame()
-                    self.lock.release()
+                    cv.namedWindow(self.name, cv.WINDOW_AUTOSIZE)
                     cv.imshow(self.name, loadedFrame)
                     cv.waitKey(1)
-
-        self.videoThread = Thread(target=show_video_thread, args=())
-        self.videoThread.daemon = True
-        self.videoThread.start()
+        except Exception as e:
+            print(str(e))
+            quit()
 
     def end(self):
         self.cam.release()
         cv.destroyAllWindows()
+        logging.info(f'"{self.name}" was shut down.')
 
 class StereoCam():    
 
@@ -107,11 +107,16 @@ if __name__ == '__main__':
     state = 'single'
 
     if state=='single':
-        cam0 = CamThread(0, 'leftCam', showVideo=True)
+        cam0 = CamThread(0, 'leftCam')
 #        cam1 = CamThread(6, 'rightCam')
+        sleep(1)
+        cam0.show_video()
+#        cam1.show_video()
     if state=='stereo':
         cam = StereoCam(7, 6)
         cam.show_video()
 
-    while True:
-        pass
+
+else:
+    # creating sub root error logger
+    subLogger = SubLogger(name='roboPi.stereoCam')

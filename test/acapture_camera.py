@@ -2,8 +2,8 @@ import cv2 as cv
 import acapture as camera
 import numpy as np
 
-cap0 = camera.open(6)
-cap1 = camera.open(7)
+cap0 = camera.open(0)
+cap1 = camera.open(1)
 
 while True:
     check0, frame0 = cap0.read()
