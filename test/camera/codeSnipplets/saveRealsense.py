@@ -1,9 +1,10 @@
 import pyrealsense2 as rs
 import cv2 as cv
 import numpy as np
+from time import sleep
 
-width = 848 
-height = 480
+width = 1280 
+height = 720
 framerate = 30 
 
 # initilize depth and color stream
@@ -13,7 +14,8 @@ config.enable_stream(rs.stream.color, width, height, rs.format.bgr8, framerate)
 # config.enable_record_to_file('video1.bag')
 
 # preparing video writer
-out = cv.VideoWriter('videor.avi', cv.VideoWriter_fourcc(*'MJPG'), 23, (width, height))
+out = cv.VideoWriter('videor.avi', cv.VideoWriter_fourcc(*'MJPG'),
+        framerate-5, (width, height))
 
 # start stream
 pipeline.start(config)
@@ -25,20 +27,18 @@ try:
         frameRGB = frames.get_color_frame()
 
         if not frameRGB:
-            print('nope')
             continue
         # conversion to numpy arrays
         imageRGB = np.asarray(frameRGB.get_data())
         
         # save to file
         out.write(imageRGB)
-        
         # apply color map to depth image
         # cv.namedWindow('Realsense', cv.WINDOW_AUTOSIZE)
         # cv.imshow('Realssense', imageRGB)
         # cv.waitKey(1)
-
+except Exception as e:
+    print(str(e))
 finally:
     pipeline.stop()
-    cv.destroyAllWindows()
     out.release()
